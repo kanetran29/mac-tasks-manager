@@ -2,7 +2,9 @@
 
 A lightweight terminal-based task manager for macOS with **mouse support** built with Python and [Textual](https://textual.textualize.io/).
 
-![Task Manager Screenshot](docs/screenshot.png)
+## Demo
+
+![Task Manager Demo](docs/demo.svg)
 
 ## Features
 

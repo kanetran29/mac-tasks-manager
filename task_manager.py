@@ -135,46 +135,50 @@ class TaskManagerApp(App):
     
     CSS = """
     Screen {
-        layout: grid;
-        grid-size: 2 3;
-        grid-rows: auto 1fr auto;
-    }
-    
-    #cpu-panel {
-        column-span: 1;
-        border: round cyan;
-        padding: 1;
-        margin: 1;
-    }
-    
-    #memory-panel {
-        column-span: 1;
-        border: round cyan;
-        padding: 1;
-        margin: 1;
-    }
-    
-    #process-container {
-        column-span: 2;
-        border: round cyan;
-        padding: 1;
-        margin: 1;
+        layout: vertical;
     }
     
     #controls {
-        column-span: 2;
-        height: auto;
-        padding: 1;
-        margin: 1;
+        height: 3;
+        padding: 0 1;
         layout: horizontal;
+        align: left middle;
+        dock: top;
+    }
+    
+    #stats-row {
+        layout: horizontal;
+        height: 12;
+    }
+    
+    #cpu-panel {
+        width: 1fr;
+        border: round cyan;
+        padding: 1;
+        margin: 0 1;
+    }
+    
+    #memory-panel {
+        width: 1fr;
+        border: round cyan;
+        padding: 1;
+        margin: 0 1;
+    }
+    
+    #process-container {
+        border: round cyan;
+        padding: 0;
+        margin: 0 1;
+        height: 1fr;
     }
     
     #search-input {
-        width: 25;
+        width: 20;
     }
     
-    Button {
-        min-width: 8;
+    .btn {
+        width: auto;
+        min-width: 10;
         margin: 0 1;
     }
     
@@ -183,8 +187,7 @@ class TaskManagerApp(App):
     }
     
     #message {
-        margin-left: 1;
-        width: auto;
+        margin-left: 2;
     }
     
     ProcessTable {
@@ -195,7 +198,8 @@ class TaskManagerApp(App):
     BINDINGS = [
         ("q", "quit", "Quit"),
         ("r", "refresh", "Refresh"),
-        ("k", "kill_selected", "Kill Selected"),
+        ("k", "kill_selected", "Kill"),
+        ("s", "focus_search", "Search"),
         ("escape", "clear_selection", "Clear"),
     ]
     
@@ -203,20 +207,26 @@ class TaskManagerApp(App):
     
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
-        yield Container(CPUWidget(), id="cpu-panel")
-        yield Container(MemoryWidget(), id="memory-panel")
+        # Controls at top
+        yield Horizontal(
+            Input(placeholder="Search...", id="search-input"),
+            Button("Search", id="search-btn", variant="primary", classes="btn"),
+            Button("Clear", id="clear-btn", classes="btn"),
+            Button("KILL", id="kill-btn", variant="error", classes="btn"),
+            Button("Refresh", id="refresh-btn", classes="btn"),
+            Label("", id="message"),
+            id="controls"
+        )
+        # Stats row
+        yield Horizontal(
+            Container(CPUWidget(), id="cpu-panel"),
+            Container(MemoryWidget(), id="memory-panel"),
+            id="stats-row"
+        )
+        # Process table
         yield Container(
             ProcessTable(id="process-table"),
             id="process-container"
-        )
-        yield Horizontal(
-            Input(placeholder="Search...", id="search-input"),
-            Button("🔍", id="search-btn", variant="primary"),
-            Button("✖", id="clear-btn"),
-            Button("☠ Kill", id="kill-btn", variant="error"),
-            Button("↻", id="refresh-btn"),
-            Label("", id="message"),
-            id="controls"
         )
         yield Footer()
     

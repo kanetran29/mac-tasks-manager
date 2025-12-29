@@ -1,6 +1,17 @@
 #!/bin/bash
 # TaskManager App Launcher
-osascript -e 'tell application "Terminal"
-    activate
+# Opens Task Manager in Terminal and closes the launcher window
+
+osascript <<'END'
+tell application "Terminal"
+    -- Store reference to current window (launcher)
+    set launcherWindow to front window
+    
+    -- Open new terminal with Task Manager
     do script "cd /Users/kanetran29/Playground/mac-tasks-manager && python3 task_manager.py"
-end tell'
+    activate
+    
+    -- Close the launcher window
+    close launcherWindow
+end tell
+END
