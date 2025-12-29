@@ -1,0 +1,6 @@
+#!/bin/bash
+# TaskManager App Launcher
+osascript -e 'tell application "Terminal"
+    activate
+    do script "cd /Users/kanetran29/Playground/mac-tasks-manager && python3 task_manager.py"
+end tell'
